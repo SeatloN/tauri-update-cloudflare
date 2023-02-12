@@ -1,4 +1,4 @@
-export type Asset = { name: string; browser_download_url: string }
+export type Asset = { name: string; browser_download_url: string, url: string }
 export const getReleases = async (request: Request): Promise<Response> => {
   const reqUrl = new URL(
     `https://api.github.com/repos/${GITHUB_ACCOUNT}/${GITHUB_REPO}/releases/latest`,
@@ -43,11 +43,12 @@ export async function findAssetSignature(
   if (!foundSignature) {
     return undefined
   }
-
   const response = await fetch(foundSignature.browser_download_url)
+
   if (response.status !== 200) {
     return undefined
   }
+  
   const signature = await response.text()
   return signature
 }
